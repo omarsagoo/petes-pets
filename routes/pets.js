@@ -28,6 +28,7 @@ module.exports = (app) => {
     // SHOW PET
     app.get('/pets/:id', (req, res) => {
         Pet.findById(req.params.id).exec((err, pet) => {
+            console.log(pet)
             res.render('pets-show', { pet: pet });
         });
     });
@@ -100,6 +101,13 @@ module.exports = (app) => {
                 description: `Purchased ${pet.name}, ${pet.species}`,
                 source: token,
             }).then((chg) => {
+                pet.purchasedAt = Date.now();
+                return pet.save();
+                
+            })
+            .then((pet) => {
+                console.log("here", pet)
+                
                 res.redirect(`/pets/${req.params.id}`);
             })
             .catch(err => {
