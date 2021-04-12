@@ -34,6 +34,7 @@ module.exports = [
         "species": "West Highland White Terrier",
         "birthday": "2008-11-11",
         "favoriteFood": "Fish",
+        "price": 19.99,
         "picUrl": "http://www.dogbreedslist.info/uploads/allimg/dog-pictures/West-Highland-White-Terrier-2.jpg",
         "picUrlSq": "https://upload.wikimedia.org/wikipedia/commons/2/2c/West_Highland_White_Terrier_Krakow.jpg",
         "description": "Princhi is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food"

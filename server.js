@@ -3,6 +3,7 @@ if (!process.env.PORT) {
   process.env.NODE_ENV = "dev"
 }
 
+
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -15,6 +16,8 @@ const app = express();
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/petes-pets');
+
+app.locals.PUBLIC_STRIPE_API_KEY = process.env.PUBLIC_STRIPE_API_KEY
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
