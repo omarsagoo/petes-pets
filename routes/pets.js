@@ -1,6 +1,7 @@
 // MODELS
 const Pet = require('../models/pet');
 const mailer = require('../utils/mailer');
+const charge = require('../utils/charge')
 
 // PET ROUTES
 module.exports = (app) => {
@@ -96,12 +97,8 @@ module.exports = (app) => {
                 res.redirect(`/pets/${req.params.id}`);
             }
 
-            const charge = stripe.charges.create({
-                amount: pet.price * 100,
-                currency: 'usd',
-                description: `Purchased ${pet.name}, ${pet.species}`,
-                source: token,
-            }).then((chg) => {
+            charge.chargeUser(pet, req, res)
+            .then((chg) => {
                 const user = {
                     email: req.body.stripeEmail,
                     amount: chg.amount / 100,
