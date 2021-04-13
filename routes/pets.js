@@ -1,5 +1,6 @@
 // MODELS
 const Pet = require('../models/pet');
+const mailer = require('../utils/mailer');
 
 // PET ROUTES
 module.exports = (app) => {
@@ -28,7 +29,6 @@ module.exports = (app) => {
     // SHOW PET
     app.get('/pets/:id', (req, res) => {
         Pet.findById(req.params.id).exec((err, pet) => {
-            console.log(pet)
             res.render('pets-show', { pet: pet });
         });
     });
@@ -95,20 +95,26 @@ module.exports = (app) => {
                 console.log('Error: ' + err);
                 res.redirect(`/pets/${req.params.id}`);
             }
+
             const charge = stripe.charges.create({
                 amount: pet.price * 100,
                 currency: 'usd',
                 description: `Purchased ${pet.name}, ${pet.species}`,
                 source: token,
             }).then((chg) => {
+                const user = {
+                    email: req.body.stripeEmail,
+                    amount: chg.amount / 100,
+                    petName: pet.name
+                };
+                // Call our mail handler to manage sending emails
+                mailer.sendMail(user, req, res);
+
                 pet.purchasedAt = Date.now();
-                return pet.save();
-                
+                return pet.save()
             })
-            .then((pet) => {
-                console.log("here", pet)
-                
-                res.redirect(`/pets/${req.params.id}`);
+            .then(() => {
+                return
             })
             .catch(err => {
                 console.log('Error:' + err);
